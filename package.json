@@ -1,0 +1,21 @@
+{
+  "name": "google-map-crawler",
+  "version": "1.0.0",
+  "description": "a node.js crawler for google map tiles",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CrashedBboy/google-map-crawler.git"
+  },
+  "author": "crashedbboy",
+  "bugs": {
+    "url": "https://github.com/CrashedBboy/google-map-crawler/issues"
+  },
+  "homepage": "https://github.com/CrashedBboy/google-map-crawler#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}
