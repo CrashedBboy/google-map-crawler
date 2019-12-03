@@ -1,58 +1,66 @@
 let RAD = 180 / Math.PI;
 
+const MAX = 20;
+
 $(document).ready(() => {
 
-    
 });
 
-function getTilesByLevel(level) {
+async function getTilesByLevel(level) {
 
-    getTile(0, 0, level);
+    let max = Math.pow(2, level) - 1;
+    let result;
+
+    for (let y = 0; y <= max; y++) {
+
+        for (let x = 0; x <= max; x++) {
+
+            result = await getTile(x, y, level);
+        }
+    }
+
+    if (level < MAX) {
+
+        getTilesByLevel(level+1);
+    }
 }
 
 function getTile(x, y, z) {
 
-    console.log('x: ' + x + ', y: ' + y + ', z: ' + z);
+    return new Promise((resolve) => {
 
-    if (y > (Math.pow(2, z)-1)) {
-
-        console.log('Completed');
-        return;
-    }
-
-    if (x > (Math.pow(2, z)-1)) {
-
-        setTimeout(() => { getTile(0, y+1, z) }, 100);
-        return;
-    }
-
-    $.ajax({
-        url: 'https://mt1.google.com/vt/lyrs=y&x='+x+'&y='+y+'&z='+z,
-        type: 'GET',
-        mimeType: "text/plain; charset=x-user-defined"
-    })
-        .done((data) => {
-
-            let base64Data = base64encode(data);
-
-            $("#result").attr('src', 'data:image/jpeg;base64,' + base64Data);
-
-            $.ajax({
-                url: 'save.php',
-                type: 'POST',
-                dataType: "json",
-                data: {
-                    x: x,
-                    y: y,
-                    z: z,
-                    image: base64Data
-                }
-            })
-            .done((d) => {
-
-                setTimeout(() => { getTile(x+1, y, z) }, 100);
+        console.log('x: ' + x + ', y: ' + y + ', z: ' + z);
+    
+        $.ajax({
+            url: 'https://mt1.google.com/vt/lyrs=y&x='+x+'&y='+y+'&z='+z,
+            type: 'GET',
+            mimeType: "text/plain; charset=x-user-defined"
+        })
+            .done((data) => {
+    
+                let base64Data = base64encode(data);
+    
+                $("#result").attr('src', 'data:image/jpeg;base64,' + base64Data);
+    
+                $.ajax({
+                    url: 'save.php',
+                    type: 'POST',
+                    dataType: "json",
+                    data: {
+                        x: x,
+                        y: y,
+                        z: z,
+                        image: base64Data
+                    }
+                })
+                .done((d) => {
+    
+                    resolve();
+                });
             });
-        });
+    });
+
+    
 }
 
 function base64encode(str) {
