@@ -5,6 +5,11 @@ $(document).ready(() => {
     
 });
 
+function getTilesByLevel(level) {
+
+    getTile(0, 0, level);
+}
+
 function getTile(x, y, z) {
 
     console.log('x: ' + x + ', y: ' + y + ', z: ' + z);
