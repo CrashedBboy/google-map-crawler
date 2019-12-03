@@ -1,2 +1,2 @@
 # google-map-crawler
-a node.js crawler for google map tiles
+a js/php crawler for google map tiles
