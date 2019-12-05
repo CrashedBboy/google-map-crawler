@@ -36,37 +36,39 @@ async function getTilesByLevel(level, yStart = 0, yStop) {
 }
 
 
-// example: getRegionalTilesByLevel('indonesia', 11.25, 90, -11.25, 157.5, 4)
-async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level) {
+// example: getRegionalTilesByLevel('indonesia', 6, 94, -11, 157.5, 4)
+async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level, toLevel) {
 
-    // wrong!
+    let startTile = lonlat2Tile(ulLat, ulLon, level);
+    let endTile = lonlat2Tile(lrLat, lrLon, level);
 
-    // let maxLatitude = 90;
+    let xStart = Math.floor(startTile.x);
+    let xStop = Math.ceil(endTile.x);
 
-    // let levelTilesNumber = Math.pow(2, level);
-    // let latInterval = (maxLatitude*2) / levelTilesNumber;
-    // let lonInterval = 360 / levelTilesNumber;
+    let yStart = Math.floor(startTile.y);
+    let yStop = Math.ceil(endTile.y);
 
-    // let xStart = Math.ceil((ulLon + 180) / lonInterval);
-    // let xStop = Math.floor((lrLon + 180) / lonInterval);
+    for (let y = yStart; y < yStop; y++) {
 
-    // let yStart = Math.ceil((maxLatitude - ulLat) / latInterval);
-    // let yStop = Math.floor((maxLatitude - lrLat) / latInterval);
+        for (let x = xStart; x < xStop; x++) {
 
-    // for (let y = yStart; y < yStop; y++) {
+            if (!paused) {
 
-    //     for (let x = xStart; x < xStop; x++) {
-
-    //         if (!paused) {
-
-    //             result = await getTile(x, y, level, regionName);
+                result = await getTile(x, y, level, regionName);
             
-    //         } else {
+            } else {
 
-    //             return;
-    //         }
-    //     }
-    // }
+                return;
+            }
+        }
+    }
+
+    console.log("completed!");
+
+    if (toLevel && toLevel > level) {
+
+        getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level+1, toLevel);
+    }
 }
 
 function getTile(x, y, z, regionName) {
@@ -137,6 +139,7 @@ function base64encode(str) {
     return out;
 }
 
+// latitude and longitude are in degrees
 function lonlat2Tile(latitude, longitude, level) {
 
     // see: https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
@@ -149,7 +152,12 @@ function lonlat2Tile(latitude, longitude, level) {
 
     let yTile = n * ( 1 - ( Math.log( Math.tan(latitudeRadian) + sec(latitudeRadian) ) / Math.PI ) ) / 2;
 
-    console.log("X: " + xTile + ", Y: " + yTile);
+    // console.log("X: " + xTile + ", Y: " + yTile);
+
+    return {
+        x: xTile,
+        y: yTile
+    };
 }
 
 function sec(radian) {
