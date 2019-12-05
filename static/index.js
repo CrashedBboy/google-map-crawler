@@ -35,7 +35,37 @@ async function getTilesByLevel(level, yStart = 0, yStop) {
     }
 }
 
-function getTile(x, y, z) {
+
+// example: getRegionalTilesByLevel('indonesia', 11.25, 90, -11.25, 157.5, 4)
+async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level) {
+
+    let levelTilesNumber = Math.pow(2, level);
+    let latInterval = 180 / levelTilesNumber;
+    let lonInterval = 360 / levelTilesNumber;
+
+    let xStart = (ulLon + 180) / lonInterval;
+    let xStop = (lrLon + 180) / lonInterval;
+
+    let yStart = (90 - ulLat) / latInterval;
+    let yStop = (90 - lrLat) / latInterval;
+
+    for (let y = yStart; y < yStop; y++) {
+
+        for (let x = xStart; x < xStop; x++) {
+
+            if (!paused) {
+
+                result = await getTile(x, y, level, regionName);
+            
+            } else {
+
+                return;
+            }
+        }
+    }
+}
+
+function getTile(x, y, z, regionName) {
 
     return new Promise((resolve) => {
 
@@ -61,7 +91,8 @@ function getTile(x, y, z) {
                         x: x,
                         y: y,
                         z: z,
-                        image: base64Data
+                        image: base64Data,
+                        region: regionName
                     }
                 })
                 .done((d) => {
