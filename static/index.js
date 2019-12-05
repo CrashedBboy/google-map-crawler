@@ -1,27 +1,37 @@
 let RAD = 180 / Math.PI;
 
-const MAX = 20;
+const MAX = 10;
+
+let paused = false;
 
 $(document).ready(() => {
 
 });
 
-async function getTilesByLevel(level) {
+async function getTilesByLevel(level, yStart = 0, yStop) {
 
     let max = Math.pow(2, level) - 1;
     let result;
 
-    for (let y = 0; y <= max; y++) {
+    let stop = max;
+    if (yStop && yStop >= yStart && yStop <= max) {
+
+        stop = yStop;
+    }
+
+    for (let y = yStart; y <= stop; y++) {
 
         for (let x = 0; x <= max; x++) {
 
-            result = await getTile(x, y, level);
+            if (!paused) {
+
+                result = await getTile(x, y, level);
+            
+            } else {
+
+                return;
+            }
         }
-    }
-
-    if (level < MAX) {
-
-        getTilesByLevel(level+1);
     }
 }
 
@@ -30,6 +40,7 @@ function getTile(x, y, z) {
     return new Promise((resolve) => {
 
         console.log('x: ' + x + ', y: ' + y + ', z: ' + z);
+        $("#text").text('x: ' + x + ', y: ' + y + ', z: ' + z);
     
         $.ajax({
             url: 'https://mt1.google.com/vt/lyrs=y&x='+x+'&y='+y+'&z='+z,
