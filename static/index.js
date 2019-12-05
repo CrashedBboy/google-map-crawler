@@ -136,3 +136,23 @@ function base64encode(str) {
     }
     return out;
 }
+
+function lonlat2Tile(latitude, longitude, level) {
+
+    // see: https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+
+    let latitudeRadian = latitude / (180/Math.PI);
+
+    let n = Math.pow(2, level);
+
+    let xTile = n * ((longitude + 180) / 360);
+
+    let yTile = n * ( 1 - ( Math.log( Math.tan(latitudeRadian) + sec(latitudeRadian) ) / Math.PI ) ) / 2;
+
+    console.log("X: " + xTile + ", Y: " + yTile);
+}
+
+function sec(radian) {
+
+    return (1/Math.cos(radian));
+}
