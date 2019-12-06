@@ -4,6 +4,8 @@ const MAX = 10;
 
 let paused = false;
 
+let base64Data;
+
 $(document).ready(() => {
 
 });
@@ -35,7 +37,7 @@ async function getTilesByLevel(level, yStart = 0, yStop) {
     }
 }
 
-
+// level 14: 7959, level 15: 15871
 // example: getRegionalTilesByLevel('indonesia', 6, 94, -11, 157.5, 4)
 async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level, toLevel) {
 
@@ -48,6 +50,8 @@ async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, l
     let yStart = Math.floor(startTile.y);
     let yStop = Math.ceil(endTile.y);
 
+    $("#x-bound").text("x from " + xStart + " to " + (xStop-1));
+    $("#y-bound").text("y from " + yStart + " to " + (yStop-1));
     for (let y = yStart; y < yStop; y++) {
 
         for (let x = xStart; x < xStop; x++) {
@@ -75,7 +79,7 @@ function getTile(x, y, z, regionName) {
 
     return new Promise((resolve) => {
 
-        console.log('x: ' + x + ', y: ' + y + ', z: ' + z);
+        // console.log('x: ' + x + ', y: ' + y + ', z: ' + z);
         $("#text").text('x: ' + x + ', y: ' + y + ', z: ' + z);
     
         $.ajax({
@@ -85,7 +89,7 @@ function getTile(x, y, z, regionName) {
         })
             .done((data) => {
     
-                let base64Data = base64encode(data);
+                base64Data = base64encode(data);
     
                 $("#result").attr('src', 'data:image/jpeg;base64,' + base64Data);
     
