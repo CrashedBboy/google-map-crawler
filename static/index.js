@@ -37,8 +37,8 @@ async function getTilesByLevel(level, yStart = 0, yStop) {
     }
 }
 
-// level 14: 7959, level 15: 15871
 // example: getRegionalTilesByLevel('indonesia', 6, 94, -11, 157.5, 4)
+// example: getRegionalTilesByLevel('east-kalimantan', 2.665231, 113.788818, -2.413267, 119.027324, 5)
 async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level, toLevel) {
 
     let startTile = lonlat2Tile(ulLat, ulLon, level);
@@ -49,6 +49,11 @@ async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, l
 
     let yStart = Math.floor(startTile.y);
     let yStop = Math.ceil(endTile.y);
+
+    // yStart = 33079; yStop = 33099;
+    // yStart = 33099; yStop = 33119;
+    // yStart = 33119; yStop = 33149;
+    // yStart = 33149; yStop = 33208;
 
     $("#x-bound").text("x from " + xStart + " to " + (xStop-1));
     $("#y-bound").text("y from " + yStart + " to " + (yStop-1));
@@ -75,7 +80,7 @@ async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, l
     }
 }
 
-function getTile(x, y, z, regionName) {
+function getTile(x, y, z, regionName, drawImage = false) {
 
     return new Promise((resolve) => {
 
@@ -91,7 +96,10 @@ function getTile(x, y, z, regionName) {
     
                 base64Data = base64encode(data);
     
-                $("#result").attr('src', 'data:image/jpeg;base64,' + base64Data);
+                if (drawImage) {
+
+                    $("#result").attr('src', 'data:image/jpeg;base64,' + base64Data);
+                }
     
                 $.ajax({
                     url: 'save.php',
