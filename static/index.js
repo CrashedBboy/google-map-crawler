@@ -39,6 +39,9 @@ async function getTilesByLevel(level, yStart = 0, yStop) {
 
 // example: getRegionalTilesByLevel('indonesia', 6, 94, -11, 157.5, 4)
 // example: getRegionalTilesByLevel('east-kalimantan', 2.665231, 113.788818, -2.413267, 119.027324, 5)
+// example: getRegionalTilesByLevel('lampung', -3.679327, 103.531741, -6.039077, 106.223360, 13)
+// example: getRegionalTilesByLevel('banten-jakarta', -5.839810, 105.040608, -7.042476, 106.977860, 13)
+// example: getRegionalTilesByLevel('taiwan', 25.302141, 120.033393, 21.896279, 122.008280, 15)
 async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, level, toLevel) {
 
     let startTile = lonlat2Tile(ulLat, ulLon, level);
@@ -50,10 +53,10 @@ async function getRegionalTilesByLevel(regionName, ulLat, ulLon, lrLat, lrLon, l
     let yStart = Math.floor(startTile.y);
     let yStop = Math.ceil(endTile.y);
 
-    // yStart = 33079; yStop = 33099;
-    // yStart = 33099; yStop = 33119;
-    // yStart = 33119; yStop = 33149;
-    // yStart = 33149; yStop = 33208;
+    // yStart = ; yStop = ;
+    // yStart = ; yStop = ;
+    // yStart = ; yStop = ;
+    // yStart = ; yStop = ;
 
     $("#x-bound").text("x from " + xStart + " to " + (xStop-1));
     $("#y-bound").text("y from " + yStart + " to " + (yStop-1));
